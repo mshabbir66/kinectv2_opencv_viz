@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 2.8)
+project( DisplayImage )
+find_package( OpenCV REQUIRED )
+
+set(KINECT_LIB "C:/Program Files/Microsoft SDKs/Kinect/v2.0_1409" CACHE FILEPATH "description")
+FIND_LIBRARY(Kinect20_LIBRARIES NAMES Kinect20 Kinect20.lib PATHS "${KINECT_LIB}/lib/x86" DOC "Freetype library")
+FIND_PATH(Kinect20_INCLUDE_DIRS Kinect.h "${KINECT_LIB}/inc" DOC "Freetype includes")
+INCLUDE_DIRECTORIES(${Kinect20_INCLUDE_DIRS})
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+file(GLOB K4W_OPENCV_SOURCES	
+	CK4Wv2OpenCVModule.*
+)
+add_library(KinectToOpenCV ${K4W_OPENCV_SOURCES} ${Kinect20_LIBRARIES} )
+
+add_executable( DisplayImage  main.cpp )
+target_link_libraries( DisplayImage ${OpenCV_LIBS} KinectToOpenCV ${Kinect20_LIBRARIES})
